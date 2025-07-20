@@ -19,19 +19,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   task.init({
-    user_id:DataTypes.INTEGER,
-    title: DataTypes.STRING,
+    user_id:{
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
+    title:{
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
     description: DataTypes.STRING,
     logged_time: DataTypes.FLOAT ,
     status: DataTypes.ENUM('To Do', 'In Progress', 'Done'),
     estimated_time: DataTypes.FLOAT ,
     priority: DataTypes.ENUM('High', 'Medium', 'Low'),
     due_date: DataTypes.DATE,
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'task',
+    timestamps: true ,
   });
   return task;
 };
