@@ -19,15 +19,20 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   task.init({
-    user_id:{
+    task_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true
+    },
+    user_id:{
+      type: DataTypes.INTEGER,
+
     },
     title:{
       type: DataTypes.STRING,
-      primaryKey: true,
+      
     },
-    description: DataTypes.STRING,
+    description: DataTypes.TEXT,
     logged_time: DataTypes.FLOAT ,
     status: DataTypes.ENUM('To Do', 'In Progress', 'Done'),
     estimated_time: DataTypes.FLOAT ,
