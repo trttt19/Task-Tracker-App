@@ -3,6 +3,12 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('tasks', {
+      task_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -18,7 +24,7 @@ module.exports = {
         allowNull: false
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       logged_time: {
         type: Sequelize.FLOAT ,
@@ -47,13 +53,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
-    // Add composite primary key (user_id, title)
-    await queryInterface.addConstraint('tasks', {
-      fields: ['user_id', 'title'],
-      type: 'primary key',
-      name: 'tasks_pkey'
-    });
+    },
+  {
+    indexes: [
+      {
+        fields: ['user_id']
+      }
+    ]
+  }
+  );
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('tasks');
