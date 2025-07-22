@@ -1,0 +1,30 @@
+{
+  "name": "task-tracker-app",
+  "version": "1.0.0",
+  "description": "A full stack Task Tracker web application built with React, Node.js, Express and PostgreSQl. It allows users to sign up, log in, create and manage tasks, track time, and monitor progress.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trttt19/Task-Tracker-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trttt19/Task-Tracker-App/issues"
+  },
+  "homepage": "https://github.com/trttt19/Task-Tracker-App#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@eslint/json": "^0.13.1",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2"
+  }
+}

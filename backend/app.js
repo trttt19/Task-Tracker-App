@@ -19,8 +19,8 @@ app.post('/users', async (req, res) => {
 // POST /tasks
 app.post('/tasks', async (req, res) => {
   try {
-    const { title, description, user_id } = req.body;
-    const task = await db.task.create({ title, description, user_id:1 });
+    const { title, description } = req.body;
+    const task = await db.task.create({ title, description, user_id: 1 });
     res.status(201).json(task);
   } catch (err) {
     console.error('Error creating task:', err);

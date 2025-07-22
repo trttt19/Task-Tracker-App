@@ -27,7 +27,7 @@ module.exports = {
         type: Sequelize.TEXT
       },
       logged_time: {
-        type: Sequelize.FLOAT ,
+        type: Sequelize.FLOAT,
         defaultValue: 0
       },
       status: {
@@ -54,16 +54,16 @@ module.exports = {
         type: Sequelize.DATE
       }
     },
-  {
-    indexes: [
       {
-        fields: ['user_id']
+        indexes: [
+          {
+            fields: ['user_id']
+          }
+        ]
       }
-    ]
-  }
-  );
+    );
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, _Sequelize) {
     await queryInterface.dropTable('tasks');
   }
 };
