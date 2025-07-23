@@ -1,0 +1,29 @@
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "name":"toqua",
+    "email":"toqua@gmail.com",
+    "password":"pass123"
+}
+
+###Empty parameter
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "name":"toqua",
+    "email":"toqua@gmail.com",
+    "password":""
+}
+
+### Invalid email format
+###Empty parameter
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "name":"toqua",
+    "email":"ttt.com",
+    "password":"11111"
+}
