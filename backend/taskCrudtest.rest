@@ -1,0 +1,8 @@
+POST http://localhost:3000/tasks
+Content-Type: application/json
+
+{
+    "user": { "user_id": 3, "email": "toqua@gmail.com", "name":"toqua" },
+    "title":"new Task",
+    "description":"thisis a desc"
+}
