@@ -1,0 +1,23 @@
+const { param, checkExact } = require('express-validator')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const taskValidation = checkExact([
+    param("task_id").isInt().withMessage("task_id must be a UUID")
+])
+module.exports = { taskValidation }
