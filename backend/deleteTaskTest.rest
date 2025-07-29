@@ -1,0 +1,4 @@
+DELETE  http://localhost:3000/tasks/35
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1MzgxOTIyMSwiZXhwIjoxNzUzODIxMDIxfQ.FIhwVwuOnRnXTJE3eFSOHXX2p1ZuaU2NFv6JoCW6Q7Y
+
+{"lll":"llllllllll"}
