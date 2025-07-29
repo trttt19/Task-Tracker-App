@@ -27,3 +27,14 @@ Content-Type: application/json
     "email":"ttt.com",
     "password":"11111"
 }
+
+### Invalid email format
+###Empty parameter
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "name":"",
+    "email":"tt@gmail.com",
+    "password":"11111"
+}

@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcrypt')
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     /**
@@ -32,7 +33,18 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'user',
-    timestamps: true // set to true if you want Sequelize to manage createdAt/updatedAt
+    timestamps: true, // set to true if you want Sequelize to manage createdAt/updatedAt
+    hooks: {
+      beforeCreate: async (userObj) => {
+        userObj.password = await bcrypt.hash(userObj.password, 10)
+      },
+      beforeUpdate: async (userObj) => {
+        if (userObj.changed('password'))
+          userObj.password = await bcrypt.hash(userObj.password, 10)
+
+      }
+    }
+
   });
   return user;
 };
