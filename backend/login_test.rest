@@ -1,0 +1,46 @@
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email":"toqua@gmail.com",
+    "password":"pass123"
+}
+
+#### Invalid pass
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email":"toqua@gmail.com",
+    "password":"pass12"
+}
+####
+
+GET http://localhost:3000/task
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1MzYwMjUwMSwiZXhwIjoxNzUzNjAyNTkxfQ.vIlM8ncGqY3prRByxF9paPBnI2pvOO5KJg9BIgZxSHk
+#### empty parameter
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email":"toqua@gmail.com"
+
+    
+}
+
+#### Invalid email
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email":"toa@gmail.com",
+    "password":"pass12"
+}
+
+#### expiredToken
+GET http://localhost:3000/task
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1Mzc3NzAyMiwiZXhwIjoxNzUzNzc4ODIyfQ.-Ia0VvtCfSaH0I9i7sFyo4LcXM7PpHyMIlPXPpAmptY
+
+#### Token
+GET http://localhost:3000/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1Mzc3NzA3NCwiZXhwIjoxNzUzNzc4ODc0fQ.C4yB56p-OE_XWZC1TgPnWzpbestAtIn2MNpDkAYW19w
