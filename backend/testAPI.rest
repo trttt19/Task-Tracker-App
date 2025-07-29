@@ -6,7 +6,15 @@ Content-Type: application/json
     "email":"toqua@gmail.com",
     "password":"pass123"
 }
+###user2
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
 
+{
+    "name":"t",
+    "email":"t@gmail.com",
+    "password":"pass123"
+}
 ###Empty parameter
 POST http://localhost:3000/auth/signup
 Content-Type: application/json
