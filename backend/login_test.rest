@@ -44,3 +44,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJlb
 #### Token
 GET http://localhost:3000/tasks
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1Mzc3NzA3NCwiZXhwIjoxNzUzNzc4ODc0fQ.C4yB56p-OE_XWZC1TgPnWzpbestAtIn2MNpDkAYW19w
+
+###user2
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email":"t@gmail.com",
+    "password":"pass123"
+}
