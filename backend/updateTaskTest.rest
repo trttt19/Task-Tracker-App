@@ -1,0 +1,47 @@
+PATCH http://localhost:3000/tasks/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1MzgxNTA1NCwiZXhwIjoxNzUzODE2ODU0fQ.HuhZoZ1_jv6N5ks3u-jM9KJ4z2VA2JdZDcgL78pe_1A
+
+{
+    "description":"add description",
+    "logged_time":3.5
+}
+###status,priority,title
+PATCH http://localhost:3000/tasks/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1MzgxNTA1NCwiZXhwIjoxNzUzODE2ODU0fQ.HuhZoZ1_jv6N5ks3u-jM9KJ4z2VA2JdZDcgL78pe_1A
+
+{
+   "status":"done",
+   "priority":"high",
+   "title":"modified one"
+}
+
+###invalid entries
+PATCH http://localhost:3000/tasks/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1MzgxNTA1NCwiZXhwIjoxNzUzODE2ODU0fQ.HuhZoZ1_jv6N5ks3u-jM9KJ4z2VA2JdZDcgL78pe_1A
+
+{
+   "priority":"hh",
+   "title":"modified one"
+}
+
+###task doesnt exist
+PATCH http://localhost:3000/tasks/10000
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1MzgxNTA1NCwiZXhwIjoxNzUzODE2ODU0fQ.HuhZoZ1_jv6N5ks3u-jM9KJ4z2VA2JdZDcgL78pe_1A
+
+{
+   "priority":"high",
+   "title":"modified one"
+}
+###invalid parameters
+PATCH http://localhost:3000/tasks/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1MzgxNTA1NCwiZXhwIjoxNzUzODE2ODU0fQ.HuhZoZ1_jv6N5ks3u-jM9KJ4z2VA2JdZDcgL78pe_1A
+
+{
+   "priorit":"low",
+   "title":"modified one"
+}
