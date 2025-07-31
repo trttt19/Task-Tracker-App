@@ -1,0 +1,15 @@
+POST http://localhost:3000/tasks 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1Mzk5NzU2OSwiZXhwIjoxNzUzOTk5MzY5fQ.ETqVNMf6rnpz01N15L5P7XvsnvTbNd3RpH2S_NzZzW0
+Content-Type: application/json
+
+{
+    "title":"task"
+}
+####
+POST http://localhost:3000/tasks 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDAwMTUxNCwiZXhwIjoxNzU0MDAzMzE0fQ.aUMG1wb8mr2cDufpMO_-LddyIzIucnELogPJUzIKjDA
+Content-Type: application/json
+
+{
+    "title":""
+}
