@@ -31,16 +31,16 @@ module.exports = {
         defaultValue: 0
       },
       status: {
-        type: Sequelize.ENUM('To Do', 'In Progress', 'Done'),
-        defaultValue: 'To Do'
+        type: Sequelize.ENUM('toDo', 'inProgress', 'done'),
+        defaultValue: 'toDo'
       },
       estimated_time: {
         type: Sequelize.FLOAT,
         defaultValue: 0
       },
       priority: {
-        type: Sequelize.ENUM('High', 'Medium', 'Low'),
-        defaultValue: 'Medium'
+        type: Sequelize.ENUM('high', 'medium', 'low'),
+        defaultValue: 'medium'
       },
       due_date: {
         type: Sequelize.DATE

@@ -9,9 +9,6 @@ async function loginUser(req, res) {
     if (!errors.isEmpty())
         return res.status(400).json({ errors: errors.array() })
     const { email, password } = req.body
-    // if (!email || !password) {
-    //     return res.status(400).json({ message: "email and password are required" })
-    // }
     const user = await user_model.findOne({
         where: { email: email }
     })
