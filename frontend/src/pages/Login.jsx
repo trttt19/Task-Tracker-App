@@ -12,9 +12,12 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const data = { name, email, password }
-            await loginUser(data)
-            alert('Login successful')
+            const data = { email, password }
+            const response = await loginUser(data)
+            console.log('here')
+            console.log(response);
+            localStorage.setItem('token', response.accessToken);
+            alert('Login successful ')
             navigate('/tasks');
         } catch (error) {
             setError(error.message); // shows backend message directly
