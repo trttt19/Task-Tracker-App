@@ -1,11 +1,12 @@
 PATCH http://localhost:3000/tasks/56
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDAwMTUxNCwiZXhwIjoxNzU0MDAzMzE0fQ.aUMG1wb8mr2cDufpMO_-LddyIzIucnELogPJUzIKjDA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDM2MjMwMCwiZXhwIjoxNzU0MzY0MTAwfQ.HkTx7BZgXYcLPMfmFp56EyQT0EyZCH4JqbaOpFRCf0M
 
 {
     "title":"edit tile",
     "description":"add description",
-    "logged_time":3.5
+    "logged_time":3.5,
+    "estimated_time":9
 }
 ###status,priority,title
 PATCH http://localhost:3000/tasks/1
@@ -21,7 +22,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlb
 ###invalid entries
 PATCH http://localhost:3000/tasks/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1MzgxNTA1NCwiZXhwIjoxNzUzODE2ODU0fQ.HuhZoZ1_jv6N5ks3u-jM9KJ4z2VA2JdZDcgL78pe_1A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDM2MjMwMCwiZXhwIjoxNzU0MzY0MTAwfQ.HkTx7BZgXYcLPMfmFp56EyQT0EyZCH4JqbaOpFRCf0M
 
 {
    "priority":"hh",
