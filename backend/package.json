@@ -26,7 +26,14 @@
     "eslint-plugin-prettier": "^5.5.3",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.3.0",
+    "jest": "^30.0.5",
+    "node-mocks-http": "^1.17.2",
     "prettier": "^3.6.2",
     "sequelize-cli": "^6.6.3"
+  },
+  "jest": {
+    "setupFiles": [
+      "./tests/jest_tests/setup.js"
+    ]
   }
 }
