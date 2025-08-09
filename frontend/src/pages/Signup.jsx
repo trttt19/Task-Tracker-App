@@ -16,7 +16,7 @@ const Signup = () => {
             const data = { name, email, password }
             await signupUser(data)
             alert('Signup successful')
-            navigate('/api/auth/login');
+            navigate('/auth/login');
         } catch (error) {
             setError(error.message);
         }
