@@ -66,11 +66,12 @@ function CreateNewTask() {
                             <form className="row g-3" onSubmit={createTaskInfo}>
                                 <div className="col-12">
                                     <label className='form-label' htmlFor='title'>Task Title</label>
-                                    <input type='text' id='title' className='form-control' value={task.title || ''} onChange={(e) => handleInputChange("title", e.target.value)} />
+                                    <input required type='text' id='title' className='form-control' value={task.title || ''} onChange={(e) => handleInputChange("title", e.target.value)} />
                                 </div>
                                 <div className="col-12">
-                                    <label className="form-label">Description</label>
+                                    <label htmlFor='description' className="form-label">Description</label>
                                     <textarea
+                                        id='description'
                                         type="text"
                                         className="form-control"
                                         value={task.description || ''}
@@ -78,28 +79,28 @@ function CreateNewTask() {
                                     />
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label">Status</label>
-                                    <StatusDropDown value={task.status || 'toDo'} onChange={(e) => handleInputChange("status", e.target.value)} />
+                                    <label htmlFor='status' className="form-label">Status</label>
+                                    <StatusDropDown id='status' value={task.status || 'toDo'} onChange={(e) => handleInputChange("status", e.target.value)} />
 
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label">Priority</label>
-                                    <PriorityDropdown value={task.priority || 'low'} onChange={(e) => handleInputChange("priority", e.target.value)} />
+                                    <label htmlFor='priority' className="form-label">Priority</label>
+                                    <PriorityDropdown id='priority' value={task.priority || 'low'} onChange={(e) => handleInputChange("priority", e.target.value)} />
 
                                 </div>
                                 <div className="col-12">
-                                    <label className="form-label">Due Date</label>
-                                    <input type="datetime-local" className="form-control" value={task.due_date || ''} onChange={(e) => handleInputChange("due_date", e.target.value)} />
+                                    <label htmlFor='due_date' className="form-label">Due Date</label>
+                                    <input id='due_date' type="datetime-local" className="form-control" value={task.due_date || ''} onChange={(e) => handleInputChange("due_date", e.target.value)} />
 
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label">Estimated Time</label>
+                                    <label htmlFor='estimated_time' className="form-label">Estimated Time</label>
 
                                     <input type="number" className="form-control" id="estimated_time" value={task.estimated_time || ''} onChange={(e) => handleInputChange("estimated_time", e.target.value)} />
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label">Logged Time</label>
-                                    <input type="text" className="form-control" id="logged_time" value={task.logged_time || ''} onChange={(e) => handleInputChange("logged_time", e.target.value)} />
+                                    <label htmlFor='logged_time' className="form-label">Logged Time</label>
+                                    <input type="number" className="form-control" id="logged_time" value={task.logged_time || ''} onChange={(e) => handleInputChange("logged_time", e.target.value)} />
                                 </div>
 
 

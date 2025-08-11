@@ -8,7 +8,7 @@ function PriorityDropdown({ value, onChange }) {
             { value: "high", label: "High" },
         ];
     return (
-        <select className="form-select" value={value} onChange={onChange}>
+        <select id="priority" className="form-select" value={value} onChange={onChange}>
 
             {priorities
                 .map((PriorityDropdown) => (

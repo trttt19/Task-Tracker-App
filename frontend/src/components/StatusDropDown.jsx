@@ -7,7 +7,7 @@ function StatusDropDown({ value, onChange }) {
         { value: "done", label: "Done" },
     ];
     return (
-        <select className="form-select" value={value} onChange={onChange}>
+        <select id="status" className="form-select" value={value} onChange={onChange}>
             {statuses.map((status) => (
                 <option key={status.value} value={status.value}>
                     {status.label}

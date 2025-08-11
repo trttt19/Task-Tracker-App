@@ -7,13 +7,13 @@ function NavBar({ value, onChange }) {
 
         <nav className="navbar ">
             <div className="container-fluid d-flex flex-wrap justify-content-between align-items-center">
-                <input className=" w-75" type="text" value={value} placeholder="search by title" onChange={(e) => onChange(e.target.value)} />
+                <input data-testid="search_bar" className=" w-75" type="text" value={value} placeholder="search by title" onChange={(e) => onChange(e.target.value)} />
 
                 <div>
                     {/* <button className="btn btn-success me-3" >
                         <i className="bi bi-filter"></i>
                     </button> */}
-                    <button className="btn btn-success me-3" onClick={() => navigate('/tasks/create')} >
+                    <button data-testid="create_button" className="btn btn-success me-3" onClick={() => navigate('/tasks/create')} >
                         <i className="bi bi-plus-lg"></i>
                     </button>
                 </div>
