@@ -14,10 +14,13 @@ app.use(express.json());
 app.use(morganMiddleware)
 app.use('/auth', authRoutes)
 app.use('/tasks', authenticationMiddleware.authToken, taskRoutes)
-try {
-  app.listen(3000, () => {
-    logger.info('Server is running on port 3000');
-  });
-} catch (err) {
-  logger.error('Failed to start server:', err);
+module.exports = app
+if (require.main === module) {
+  try {
+    app.listen(3000, () => {
+      logger.info('Server is running on port 3000');
+    });
+  } catch (err) {
+    logger.error('Failed to start server:', err);
+  }
 }

@@ -29,11 +29,12 @@
     "jest": "^30.0.5",
     "node-mocks-http": "^1.17.2",
     "prettier": "^3.6.2",
-    "sequelize-cli": "^6.6.3"
+    "sequelize-cli": "^6.6.3",
+    "supertest": "^7.1.4"
   },
   "jest": {
-    "setupFiles": [
-      "./tests/jest_tests/setup.js"
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/jest_tests/setup.js"
     ]
   }
 }

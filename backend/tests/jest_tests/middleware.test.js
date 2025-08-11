@@ -1,23 +1,14 @@
-const { authToken } = require('../../middleware/authMiddleware')
-const httpMocks = require('node-mocks-http');
-
-
-jest.mock('jsonwebtoken', () => ({
-    sign: jest.fn(),
-}));
-
+const app = require('../../app')
+const request = require('supertest')
 
 describe('Auth Middleware - authToken', () => {
 
     it('should retuern a 401 if token invalid', async () => {
-        const mockRequest = httpMocks.createRequest(
-            { headers: 'kkk', }
-        )
-        const mockResponse = httpMocks.createResponse()
-        const nextFunction = jest.fn()
-        authToken(mockRequest, mockResponse, nextFunction)
-        expect(mockResponse.statusCode).toBe(401)
-        expect(mockResponse._getJSONData()).toEqual({ message: "Invalid token format" })
+        const response = await request(app)
+            .get('/tasks')
+            .set('Authorization', 'kkk')
+        expect(response.statusCode).toBe(401)
+        expect(response.body).toEqual({ message: "Invalid token format" })
     })
 
 })
