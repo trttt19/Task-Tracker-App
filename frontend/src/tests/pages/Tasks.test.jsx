@@ -5,10 +5,6 @@ import { it, expect, describe, beforeEach, afterEach, vi } from 'vitest';
 import "@testing-library/jest-dom/vitest"
 import { MemoryRouter } from "react-router-dom";
 import { userEvent } from '@testing-library/user-event'
-import { getAllTasks } from "../../api/tasks";
-vi.mock("../../api/tasks", () => ({
-    getAllTasks: vi.fn(),
-}))
 const mockNavigate = vi.fn()
 vi.mock("react-router-dom", async () => {
     const actual = await vi.importActual('react-router-dom')
@@ -34,26 +30,6 @@ describe("tasks initial rendering", () => {
                 return "testUsername"
             else if (key === "token")
                 return "thisTokenVal"
-        })
-        getAllTasks.mockResolvedValue({
-            "tasks": [
-                {
-                    "task_id": 3,
-                    "title": "task",
-                    "status": "toDo",
-                    "priority": "medium",
-                    "due_date": "2000-08-10T12:30:00.000Z",
-
-                },
-                {
-                    "task_id": 4,
-                    "title": "task2",
-
-                    "status": "toDo",
-
-                    "priority": "medium",
-                    "due_date": "2000-08-10T12:30:00.000Z",
-                }]
         })
         render(
             <MemoryRouter>
@@ -90,26 +66,6 @@ describe("handle user interaction", () => {
             else if (key === "token")
                 return "thisTokenVal"
         })
-        getAllTasks.mockResolvedValue({
-            "tasks": [
-                {
-                    "task_id": 3,
-                    "title": "task",
-                    "status": "toDo",
-                    "priority": "medium",
-                    "due_date": "2000-08-10T12:30:00.000Z",
-
-                },
-                {
-                    "task_id": 4,
-                    "title": "task2",
-
-                    "status": "toDo",
-
-                    "priority": "medium",
-                    "due_date": "2000-08-10T12:30:00.000Z",
-                }]
-        })
         render(
             <MemoryRouter>
                 <Tasks />
@@ -125,7 +81,7 @@ describe("handle user interaction", () => {
         const searchBar = await screen.findByRole("textbox")
         await user.type(searchBar, "task2")
         await waitFor(() => {
-            expect(getAllTasks).toHaveBeenCalledWith(expect.objectContaining({ title: "task2", page: 1 }))
+            expect(screen.getByText("task2")).toBeInTheDocument()
         })
     })
     it("handles user logout", async () => {

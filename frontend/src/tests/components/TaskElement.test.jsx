@@ -6,9 +6,6 @@ import { it, expect, describe, vi } from 'vitest';
 import "@testing-library/jest-dom/vitest"
 import { Router, MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-vi.mock("../../api/tasks", () => ({
-    getTask: vi.fn()
-}))
 const mockNavigate = vi.fn()
 vi.mock("react-router-dom", async () => {
     const actual = await vi.importActual('react-router-dom')

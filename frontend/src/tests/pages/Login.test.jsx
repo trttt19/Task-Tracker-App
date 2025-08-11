@@ -1,17 +1,12 @@
 import React from "react"
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import Login from "../../pages/Login"
 import { it, expect, describe, beforeEach, afterEach } from 'vitest';
 import "@testing-library/jest-dom/vitest"
 import { MemoryRouter } from "react-router-dom";
 import { userEvent } from '@testing-library/user-event'
 import { vi } from "vitest";
-import { loginUser } from "../../api/auth"
 const originalLocalStorage = window.localStorage;
-
-vi.mock("../../api/auth", () => ({
-    loginUser: vi.fn()
-}))
 const mockNavigate = vi.fn()
 vi.mock("react-router-dom", async () => {
     const actual = await vi.importActual('react-router-dom')
@@ -65,17 +60,14 @@ describe("login page navigation", () => {
         cleanup();
     })
     it("should navigate to tasks if correct credentials", async () => {
-
-        loginUser.mockResolvedValueOnce({
-            name: "username",
-            accessToken: "dfghj"
-        })
         const user = userEvent.setup()
         await user.type(screen.getByLabelText(/email/i), "user@gmail.com")
         await user.type(screen.getByLabelText(/password/i), "pass123")
         const loginBtn = screen.getByRole("button", { name: 'Log in' })
         await user.click(loginBtn)
-        expect(mockNavigate).toHaveBeenCalledWith("/tasks")
+        await waitFor(() => {
+            expect(mockNavigate).toHaveBeenCalledWith('/tasks');
+        });
     })
 
     it("should navigate to signup when the signup link is clicked", async () => {
@@ -113,10 +105,6 @@ describe("user interaction", () => {
     it("alerts user of successful login", async () => {
         window.alert = vi.fn();
         const user = userEvent.setup()
-        loginUser.mockResolvedValueOnce({
-            name: "username",
-            accessToken: "token"
-        })
         const emailIp = screen.getByLabelText(/email/i)
         const passwordIp = screen.getByLabelText(/password/i)
         await user.type(emailIp, "user@gmail.com")
@@ -134,10 +122,6 @@ describe("user interaction", () => {
         }
         Object.defineProperty(window, 'localStorage', { value: localStorageMock, configurable: true })
         const user = userEvent.setup()
-        loginUser.mockResolvedValueOnce({
-            name: "username",
-            accessToken: "token"
-        })
         const emailIp = screen.getByLabelText(/email/i)
         const passwordIp = screen.getByLabelText(/password/i)
 
@@ -151,16 +135,12 @@ describe("user interaction", () => {
 
     it("shows error on invalid credentials", async () => {
         const user = userEvent.setup()
-        loginUser.mockRejectedValueOnce(
-            new Error("Invalid credentials")
-        )
         const emailIp = screen.getByLabelText(/email/i)
         const passwordIp = screen.getByLabelText(/password/i)
         await user.type(emailIp, "user@gmail.com")
-        await user.type(passwordIp, "pass123")
+        await user.type(passwordIp, "pass12")
         const loginBtn = screen.getByRole("button", { name: 'Log in' })
         await user.click(loginBtn)
-
         expect(screen.getByText("Invalid credentials")).toBeInTheDocument()
     })
 })
