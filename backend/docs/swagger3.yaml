@@ -1,0 +1,563 @@
+openapi: 3.1.0
+info:
+  title: Task Tracker API
+  version: 1.0.0
+  description: API for managing tasks with authentication
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+security:
+  - bearerAuth: []
+
+paths:
+  /tasks:
+    post:
+      summary: Create a new task
+      operationId: createTask
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Task data to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInput'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server Error
+
+    get:
+      summary: Get a paginated list of tasks for the logged-in user
+      operationId: getAllTasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: limit_by
+          schema:
+            type: integer
+            default: 10
+          description: Number of tasks per page
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number (starting at 1)
+        - in: query
+          name: sort_by
+          schema:
+            type: string
+            enum: [dueDate, title, createdAt]
+            default: dueDate
+          description: Field to sort tasks by
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+          description: Sort order
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: Filter tasks by title (case-insensitive partial match)
+        - in: query
+          name: priority
+          schema:
+            type: string
+            enum: [low, medium, high]
+          description: Filter tasks by priority
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, in-progress, done]
+          description: Filter tasks by status
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tasks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+        '204':
+          description: No tasks found for this user
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server Error
+  
+  /tasks/{task_id}:
+    get:
+      summary: Get details of a single task by ID for the logged-in user
+      operationId: getTask
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: task_id
+          schema:
+            type: string
+          required: true
+          description: ID of the task to retrieve
+      responses:
+        '200':
+          description: Task details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task:
+                    $ref: '#/components/schemas/Task'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: no task exists with this task id
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server Error
+
+    patch:
+      summary: Update a task partially by ID for the logged-in user
+      operationId: patchTask
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: task_id
+          schema:
+            type: string
+          required: true
+          description: ID of the task to update
+      requestBody:
+        description: Partial task object with fields to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInput'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Task updated successfully
+                  task:
+                    $ref: '#/components/schemas/Task'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Task not found
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+    
+    delete:
+      summary: Delete a task by ID for the logged-in user
+      operationId: deleteTask
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: task_id
+          schema:
+            type: string
+          required: true
+          description: ID of the task to delete
+      responses:
+        '204':
+          description: Task deleted successfully, no content returned
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Task not found
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+  
+  /auth/login:
+    post:
+      tags:
+      - Authentication
+      summary: User login to obtain JWT access token
+      operationId: loginUser
+      requestBody:
+        description: User credentials for login
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  example: yourpassword123
+      responses:
+        '200':
+          description: Login successful, returns JWT token and user info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    description: JWT access token
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  name:
+                    type: string
+                    example: Jane Doe
+                  email:
+                    type: string
+                    format: email
+                    example: user@example.com
+        '400':
+          description: Validation error - missing or invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+        '401':
+          description: Unauthorized - invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid credentials
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server error
+                    
+  /auth/signup:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      operationId: createUser
+      requestBody:
+        description: User registration data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  example: Jane Doe
+                email:
+                  type: string
+                  format: email
+                  example: jane.doe@example.com
+                password:
+                  type: string
+                  format: password
+                  example: yourpassword123
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User created successfully
+        '400':
+          description: Validation error - missing or invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+        '409':
+          description: Conflict - user already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: user already exists
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Server Error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    TaskInput:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Finish writing API contract
+        description:
+          type: string
+          example: Write swagger.yaml for task creation endpoint
+        priority:
+          type: string
+          enum: [low, medium, high]
+          example: high
+        status:
+          type: string
+          enum: [toDo, inProgress, done]
+          example: pending
+        due_date:
+          type: string
+          format: date
+          example: 2025-08-31
+        estimated_time:
+          type: integer
+          description: Estimated time to complete the task, in minutes.
+          example: 120
+        logged_time:
+          type: integer
+          description: Time already spent on the task, in minutes.
+          example: 60
+      required:
+        - title
+
+    Task:
+      allOf:
+        - $ref: '#/components/schemas/TaskInput'
+        - type: object
+          properties:
+            task_id:
+              type: string
+              example: "12345"
+            user_id:
+              type: string
+              example: "6789"
+            createdAt:
+              type: string
+              format: date-time
+              example: 2025-08-12T08:30:00Z
+            updatedAt:
+              type: string
+              format: date-time
+              example: 2025-08-12T08:30:00Z

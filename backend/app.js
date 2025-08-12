@@ -10,6 +10,10 @@ const taskRoutes = require('./routes/taskRoute')
 const authenticationMiddleware = require('./middleware/authMiddleware')
 const morganMiddleware = require('./middleware/morganMiddleware')
 const logger = require('./config/logger')
+
+const cors = require('cors');
+app.use(cors());
+
 app.use(express.json());
 app.use(morganMiddleware)
 app.use('/auth', authRoutes)

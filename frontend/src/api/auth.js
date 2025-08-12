@@ -1,7 +1,9 @@
 import api from './axios'
 const signupUser = async (data) => {
     try {
-        const response = await api.post('/api/auth/signup', data);
+        // const response = await api.post('/api/auth/signup', data);
+        const response = await api.post('auth/signup', data);
+
         return response.data;
     } catch (error) {
         throw new Error(
@@ -15,7 +17,9 @@ const signupUser = async (data) => {
 
 const loginUser = async (data) => {
     try {
-        const response = await api.post('/api/auth/login', data)
+        // const response = await api.post('/api/auth/login', data)
+        const response = await api.post('auth/login', data)
+
         return response.data
     } catch (error) {
         throw new Error(
