@@ -40,7 +40,7 @@ const createValidator = [
 
     body("status")
         .optional()
-        .isIn(status).withMessage("Status must be pending, in-progress, or completed"),
+        .isIn(status).withMessage("Status must be toDo, inProgress, or done"),
 
     body("due_date")
         .optional()
