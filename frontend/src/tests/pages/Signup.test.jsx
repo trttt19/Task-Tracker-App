@@ -1,6 +1,6 @@
 import React from "react"
 import { cleanup, render, screen } from "@testing-library/react"
-import Signup from "../../pages/signup";
+import Signup from "../../pages/Signup";
 import { it, expect, describe, beforeEach, afterEach } from 'vitest';
 import "@testing-library/jest-dom/vitest"
 import { MemoryRouter } from "react-router-dom";

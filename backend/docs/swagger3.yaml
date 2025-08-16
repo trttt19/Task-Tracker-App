@@ -108,7 +108,7 @@ paths:
           name: status
           schema:
             type: string
-            enum: [pending, in-progress, done]
+            enum: [toDo, inProgress, done]
           description: Filter tasks by status
       responses:
         '200':
