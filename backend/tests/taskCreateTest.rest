@@ -1,9 +1,9 @@
 POST http://localhost:3000/tasks 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDIwNzc5NiwiZXhwIjoxNzU0MjA5NTk2fQ.GJfMuypavYWfRxHcEBYfuSk0caDdRRNr5uQ7chELnAg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDM1NTE4OCwiZXhwIjoxNzU0MzU2OTg4fQ.q8wFZ1tLlI8w9VPELqNZio40eUTHBK_-CC3nXj8uPaw
 Content-Type: application/json
 
 {
-    "title":"task"
+    "title":"task to delete"
 }
 ####
 POST http://localhost:3000/tasks 
