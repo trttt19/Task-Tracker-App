@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Login from './pages/Login'
-import Signup from './pages/signup'
+import Signup from './pages/Signup'
 import Tasks from './pages/Tasks'
 import TaskDetails from './pages/TaskDetails'
 import CreateNewTask from './pages/CreateNewTask'
