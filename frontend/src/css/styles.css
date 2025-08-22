@@ -1,0 +1,51 @@
+:root {
+    --red: #F06466;
+    --yellow: #EBB422;
+    --green: #68C09B;
+    --grey: #DAE0DF;
+    /* --white: #F7F7F7; */
+    --white: #EFE2D8;
+}
+
+.bg-white-task {
+    background-color: var(--grey);
+}
+
+.tasks-page-container {
+    background-color: #f8f9fa;
+}
+
+.bg-task {
+    background-image: url(../images/sticky-1.jpg);
+    background-size: cover;
+}
+
+.task-table-custom {
+
+
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.task-table-custom thead th {
+    background-color: transparent;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+}
+
+
+
+.low-priority {
+    background-color: var(--green);
+
+}
+
+.medium-priority {
+    background-color: var(--yellow);
+    color: var(--yellow);
+}
+
+.high-priority {
+    background-color: var(--red);
+}

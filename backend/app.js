@@ -8,19 +8,23 @@ const app = express();
 const authRoutes = require('./routes/authRoute')
 const taskRoutes = require('./routes/taskRoute')
 const authenticationMiddleware = require('./middleware/authMiddleware')
+const morganMiddleware = require('./middleware/morganMiddleware')
+const logger = require('./config/logger')
+
+const cors = require('cors');
+app.use(cors());
+
 app.use(express.json());
+app.use(morganMiddleware)
 app.use('/auth', authRoutes)
 app.use('/tasks', authenticationMiddleware.authToken, taskRoutes)
-// const middleware = require('./middleware/authMiddleware')
-// app.get('/task', middleware.authToken, (req, res) => {
-//   res.send(req.user.name)
-// })
-
-
-try {
-  app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-  });
-} catch (err) {
-  console.error('Failed to start server:', err);
+module.exports = app
+if (require.main === module) {
+  try {
+    app.listen(3000, () => {
+      logger.info('Server is running on port 3000');
+    });
+  } catch (err) {
+    logger.error('Failed to start server:', err);
+  }
 }

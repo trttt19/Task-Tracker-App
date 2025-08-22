@@ -1,13 +1,13 @@
 POST http://localhost:3000/tasks 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1Mzk5NzU2OSwiZXhwIjoxNzUzOTk5MzY5fQ.ETqVNMf6rnpz01N15L5P7XvsnvTbNd3RpH2S_NzZzW0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDM1NTE4OCwiZXhwIjoxNzU0MzU2OTg4fQ.q8wFZ1tLlI8w9VPELqNZio40eUTHBK_-CC3nXj8uPaw
 Content-Type: application/json
 
 {
-    "title":"task"
+    "title":"task to delete"
 }
 ####
 POST http://localhost:3000/tasks 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDAwMTUxNCwiZXhwIjoxNzU0MDAzMzE0fQ.aUMG1wb8mr2cDufpMO_-LddyIzIucnELogPJUzIKjDA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InRvcXVhQGdtYWlsLmNvbSIsIm5hbWUiOiJ0b3F1YSIsImlhdCI6MTc1NDQzNzIzNCwiZXhwIjoxNzU0NDM5MDM0fQ.IUM9a29Mq7JW1aYgtaAUzKzOMxge4yNQE5cS9u_yeF4
 Content-Type: application/json
 
 {
