@@ -7,10 +7,13 @@ const sortByMap = {
     title: 'title',
     createdAt: 'createdAt'
 };
+const logger = require('../config/logger')
 async function getAllTasks(req, res) {
+    const childLogger = logger.child({ user_id: req.user.user_id })
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            childLogger.warn('Validation failed', { ValidationErrors: errors.array() })
             return res.status(400).json({ errors: errors.array() })
         }
         const limit_no = parseInt(req.query.limit_by, 10) || 10
@@ -37,12 +40,16 @@ async function getAllTasks(req, res) {
             offset: offset
         })
         if (!tasks.length) {
+            childLogger.info('No tasks found', { resultCount: 0 })
             return res.sendStatus(204)
         }
+        childLogger.info('Tasks retrieved', { resultCount: tasks.length })
         return res.status(200).json({ tasks })
 
-        // eslint-disable-next-line no-unused-vars
+
     } catch (error) {
+        childLogger.error('Server error', { error: error.message, stack: error.stack })
+
         return res.status(500).json({
             message: "Server Error"
         });
@@ -52,10 +59,16 @@ async function getAllTasks(req, res) {
 }
 
 async function getTask(req, res) {
+    const childLogger = logger.child({
+        user_id: req.user.user_id,
+        task_id: req.params.task_id
+    })
 
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            childLogger.warn('Validation failed', { ValidationErrors: errors.array() })
+
             return res.status(400).json({ errors: errors.array() })
         }
         const task = await task_model.findOne({
@@ -64,11 +77,16 @@ async function getTask(req, res) {
                 task_id: req.params.task_id
             }
         })
-        if (!task)
+        if (!task) {
+            childLogger.warn('Task not found')
             return res.status(404).json({ message: "no task exists with this task id" })
+        }
+        childLogger.info('Task retrieved successfully')
         return res.status(200).json({ task })
-        // eslint-disable-next-line no-unused-vars
+
     } catch (err) {
+        childLogger.error('Server error', { error: err.message, stack: err.stack })
+
         res.status(500).json({ message: "Server Error" })
     }
 }
