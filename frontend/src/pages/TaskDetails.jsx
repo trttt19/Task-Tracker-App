@@ -121,7 +121,7 @@ function TaskDetails() {
                                 </div>
                                 <div className="col-12">
                                     <label htmlFor='due_date' className="form-label">Due Date</label>
-                                    <input id='due_date' type="datetime-local" className="form-control" value={task.due_date || ''} onChange={(e) => handleInputChange("due_date", e.target.value)} />
+                                    <input id='due_date' type="datetime-local" className="form-control" value={task.due_date ? new Date(task.due_date).toISOString().substring(0, 16) : ''} onChange={(e) => handleInputChange("due_date", e.target.value)} />
 
                                 </div>
                                 <div className="col-md-6">

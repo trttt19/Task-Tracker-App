@@ -1,0 +1,46 @@
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"  # Exposed for local testing; Nginx will proxy requests internally
+    environment:
+      - NODE_ENV=production
+      - DATABASE_USER=postgres
+      - DATABASE_PASS=postgres
+      - DATABASE_NAME=task_tracker_database
+      - HOST=postgre
+      - ACCESS_TOKEN_SECRET=d0c75b9201140f506ea421672e4eab4bc4361b0ea35ed830ca64849c58e914aa07df726b6b1d8b84c8d1d21fe0341bcba3d2cc0914b274738d2aa33a9ea1e485
+      - LOG_LEVEL=http
+    depends_on:
+      - postgre
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    environment:
+      - VITE_API_BASE_URL=http://localhost/api # Point to nginx proxy
+    depends_on:
+      - backend
+
+
+  postgre:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: task_tracker_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  nginx:
+    build: ./nginx # Use the new nginx folder and Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+volumes:
+  pgdata:

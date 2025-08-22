@@ -2,10 +2,8 @@ const db = require('../../models')
 const env = require('../../config/env')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { createUser } = require('../../controllers/signupController')
-const { loginUser } = require('../../controllers/loginController')
-const { validationResult } = require('express-validator')
-const httpMocks = require('node-mocks-http')
+const app = require('../../app')
+const request = require('supertest')
 jest.mock('../../models', () => ({
     user: {
         create: jest.fn(),
@@ -21,65 +19,42 @@ jest.mock('bcrypt', () => ({
 jest.mock('jsonwebtoken', () => ({
     sign: jest.fn(),
 }));
-jest.mock('express-validator', () => {
-    return {
-        body: jest.fn().mockReturnThis(),
-        check: jest.fn().mockReturnThis(),
-        isString: jest.fn().mockReturnThis(),
-        isLength: jest.fn().mockReturnThis(),
-        notEmpty: jest.fn().mockReturnThis(),
-        withMessage: jest.fn().mockReturnThis(),
-        validationResult: jest.fn(() => ({
-            isEmpty: jest.fn(() => true),
-            array: jest.fn(() => []),
-        })),
-    };
-});
 
 describe('Signup Controller - createUser', () => {
     beforeEach(() => {
         db.user.create.mockClear()
-        validationResult.mockClear()
-        validationResult.mockImplementation(() => ({
-            isEmpty: jest.fn(() => true),
-            array: jest.fn(() => []),
-        }))
+        db.user.findOne.mockClear()
     })
     it('should create a new user and return a 201 status', async () => {
         const mockCreatedUser = {
             user_id: 1,
-            name: 'user',
+            name: 'username',
             email: 'user@gmail.com',
         }
-
         db.user.findOne.mockResolvedValueOnce(null)
         db.user.create.mockResolvedValueOnce(mockCreatedUser)
-        const mockRequest = httpMocks.createRequest({
-            method: 'POST',
-            url: '/users',
-            body:
-            {
-                "name": "user",
+        const response = await request(app)
+            .post('/auth/signup')
+            .send({
+                "name": "username",
                 "email": "user@gmail.com",
-                "password": "password"
-            },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await createUser(mockRequest, mockResponse)
+                "password": "pass123"
+            })
+
         expect(db.user.findOne).toHaveBeenCalledWith({
             where: {
                 email: "user@gmail.com"
             }
         })
         expect(db.user.create).toHaveBeenCalledWith({
-            name: "user",
+            name: "username",
             email: "user@gmail.com",
-            password: "password"
+            password: expect.any(String)
         })
-        expect(mockResponse.statusCode).toBe(201)
-        // expect(mockResponse._getData()).toEqual(mockCreateduser)
-        expect(mockResponse._getJSONData()).toEqual({ message: "User created successfully" })
+        expect(response.statusCode).toBe(201)
+        expect(response.body).toEqual({ message: "User created successfully" })
     })
+
 
 })
 
@@ -87,48 +62,40 @@ describe('Signup Controller - createUser', () => {
 
 describe('Login Controller - loginUser', () => {
     beforeEach(() => {
-        db.user.create.mockClear()
-        validationResult.mockClear()
-        validationResult.mockImplementation(() => ({
-            isEmpty: jest.fn(() => true),
-            array: jest.fn(() => []),
-        }))
+        db.user.findOne.mockClear()
+        bcrypt.compare.mockClear()
+        jwt.sign.mockClear()
+        env.ACCESS_TOKEN_SECRET = 'test_secret_key'
     })
-    it('returns tken and user name and email if login successful', async () => {
+    it('returns token and user name and email if login successful', async () => {
         const mockAccessToken = 'token'
         const mockUser = {
             "user_id": 10,
-            "name": "user",
-            "email": "user@gmail.com",
-            "password": "password"
+            "name": "toqua",
+            "email": "toqua@gmail.com",
+            "password": "hashedPassword"
         }
 
         db.user.findOne.mockResolvedValueOnce(mockUser)
         bcrypt.compare.mockResolvedValueOnce(true)
         jwt.sign.mockReturnValue(mockAccessToken)
-        const mockRequest = httpMocks.createRequest({
-            method: 'POST',
-            url: '/users',
-            body:
-            {
-                "email": "user@gmail.com",
-                "password": "password"
-            },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await loginUser(mockRequest, mockResponse)
+        const response = await request(app)
+            .post('/auth/login')
+            .send({
+                "email": "toqua@gmail.com",
+                "password": "pass123"
+            })
+            .expect(200)
         expect(db.user.findOne).toHaveBeenCalledWith({
             where: {
-                email: "user@gmail.com"
+                email: "toqua@gmail.com"
             }
         })
-        expect(bcrypt.compare).toHaveBeenCalledWith("password", "password")
-        const mockUserInfo = { user_id: 10, email: "user@gmail.com", name: "user" }
+        expect(bcrypt.compare).toHaveBeenCalledWith("pass123", "hashedPassword")
+        const mockUserInfo = { user_id: 10, email: "toqua@gmail.com", name: "toqua" }
 
-        expect(jwt.sign).toHaveBeenCalledWith(mockUserInfo, env.ACCESS_TOKEN_SECRET, { expiresIn: '30m' })
-        expect(mockResponse.statusCode).toBe(200)
-        // expect(mockResponse._getData()).toEqual(mockCreateduser)
-        expect(mockResponse._getJSONData()).toEqual({ accessToken: mockAccessToken, name: "user", email: "user@gmail.com" })
+        expect(jwt.sign).toHaveBeenCalledWith(mockUserInfo, 'test_secret_key', { expiresIn: '30m' })
+        expect(response.body).toEqual({ accessToken: mockAccessToken, name: "toqua", email: "toqua@gmail.com" })
     })
 
 })

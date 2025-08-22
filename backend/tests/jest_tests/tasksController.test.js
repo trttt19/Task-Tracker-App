@@ -1,12 +1,12 @@
-//const createTaskController = require('../../controllers/taskController')
 const db = require('../../models')
-const { createTask } = require('../../controllers/taskController')
-const { validationResult } = require('express-validator')
-const httpMocks = require('node-mocks-http')
-//const { jest } = require('globals')
-const { getAllTasks, getTask } = require('../../controllers/readTaskController')
-const { patchTask } = require('../../controllers/updateTaskController')
-const { deleteTask } = require('../../controllers/deleteTaskController')
+const app = require('../../app')
+const request = require('supertest')
+jest.mock('jsonwebtoken', () => ({
+    sign: jest.fn(),
+    verify: jest.fn((token, secret, callback) => {
+        callback(null, { user_id: 10 })
+    })
+}))
 jest.mock('../../models', () => ({
     task: {
         create: jest.fn(),
@@ -16,59 +16,37 @@ jest.mock('../../models', () => ({
         destroy: jest.fn(),
     },
 }))
-jest.mock('express-validator', () => {
-    return {
-        body: jest.fn().mockReturnThis(),
-        check: jest.fn().mockReturnThis(),
-        isString: jest.fn().mockReturnThis(),
-        isLength: jest.fn().mockReturnThis(),
-        notEmpty: jest.fn().mockReturnThis(),
-        withMessage: jest.fn().mockReturnThis(),
-        validationResult: jest.fn(() => ({
-            isEmpty: jest.fn(() => true),
-            array: jest.fn(() => []),
-        })),
-    };
-});
-
 describe('Task Controller - createTask', () => {
     beforeEach(() => {
         db.task.create.mockClear()
-        validationResult.mockClear()
-        validationResult.mockImplementation(() => ({
-            isEmpty: jest.fn(() => true),
-            array: jest.fn(() => []),
-        }))
     })
     it('should create a new task and return a 201 status', async () => {
         const mockCreatedTask = {
+            user_id: 10,
             task_id: 1,
             title: 'Test Task',
             description: 'desc',
         }
         const mockSequelizeInstance = {
+            user_id: 10,
             task_id: 1,
             title: 'Test Task',
             description: 'desc',
-            get: function () { return { task_id: this.task_id, title: this.title, description: this.description }; },
+            get: function () { return { user_id: this.user_id, task_id: this.task_id, title: this.title, description: this.description }; },
         }
         db.task.create.mockResolvedValueOnce(mockSequelizeInstance)
-        const mockRequest = httpMocks.createRequest({
-            method: 'POST',
-            url: '/tasks',
-            body: { title: 'Test Task', description: 'desc' },
-            user: { user_id: 10 },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await createTask(mockRequest, mockResponse)
+        const response = await request(app).post('/tasks')
+            .send({
+                title: 'Test Task', description: 'desc'
+            }).set('Authorization', 'Bearer mockValidToken')
+
         expect(db.task.create).toHaveBeenCalledWith({
             user_id: 10,
             title: 'Test Task',
             description: 'desc',
         })
-        expect(mockResponse.statusCode).toBe(201)
-        // expect(mockResponse._getData()).toEqual(mockCreatedTask)
-        expect(mockResponse._getJSONData()).toEqual(mockCreatedTask)
+        expect(response.statusCode).toBe(201)
+        expect(response.body).toEqual(mockCreatedTask)
     })
 
     it('returns status code 400 with errors array for validation errors', async () => {
@@ -79,34 +57,20 @@ describe('Task Controller - createTask', () => {
             "path": "title",
             "location": "body"
         }]
-        validationResult.mockImplementation(() => ({
-            isEmpty: jest.fn(() => false),
-            array: jest.fn(() => mockErrors),
-        }));
-        //validationResult.mockResolvedValueOnce(mockErrors)
-        const mockRequest = httpMocks.createRequest({
-            method: 'POST',
-            url: '/tasks',
-            body: { title: "", description: 'desc' },
-            user: { user_id: 10 },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await createTask(mockRequest, mockResponse)
+
+        const response = await request(app).post('/tasks').send({
+            title: "", description: 'desc'
+        }).set('Authorization', 'Bearer mockValidToken')
+
         expect(db.task.create).not.toHaveBeenCalledWith()
-        expect(mockResponse.statusCode).toBe(400)
-        // expect(mockResponse._getData()).toEqual(mockCreatedTask)
-        expect(mockResponse._getJSONData()).toEqual({ errors: mockErrors })
+        expect(response.statusCode).toBe(400)
+        expect(response.body).toEqual({ errors: mockErrors })
     })
 })
 
 describe('Task Controller - readTask', () => {
     beforeEach(() => {
         db.task.findAll.mockClear()
-        validationResult.mockClear()
-        validationResult.mockImplementation(() => ({
-            isEmpty: jest.fn(() => true),
-            array: jest.fn(() => []),
-        }))
     })
     it('gets first 10 tasks with status code 200', async () => {
         const mockReturnedTasks =
@@ -141,14 +105,9 @@ describe('Task Controller - readTask', () => {
 
 
         db.task.findAll.mockResolvedValue(mockReturnedTasks)
-        const mockRequest = httpMocks.createRequest({
-            method: 'GET',
-            url: '/tasks',
-            user: { user_id: 10 },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await getAllTasks(mockRequest, mockResponse)
-
+        const response = await request(app)
+            .get('/tasks')
+            .set('Authorization', 'Bearer mockValidToken')
         expect(db.task.findAll).toHaveBeenCalledWith({
             where: {
                 user_id: 10
@@ -157,12 +116,9 @@ describe('Task Controller - readTask', () => {
             limit: 10,
             offset: 0,
 
-
-
         })
-        expect(mockResponse.statusCode).toBe(200)
-        // expect(mockResponse._getData()).toEqual(mockCreatedTask)
-        expect(mockResponse._getJSONData()).toEqual({ tasks: mockReturnedTasks })
+        expect(response.statusCode).toBe(200)
+        expect(response.body).toEqual({ tasks: mockReturnedTasks })
     })
 
     it('gets task by id with a status code 200', async () => {
@@ -181,25 +137,19 @@ describe('Task Controller - readTask', () => {
         }
 
         db.task.findOne.mockResolvedValue(mockReturnedTask)
-        const mockRequest = httpMocks.createRequest({
-            method: 'GET',
-            url: '/tasks/1',
-            params: { task_id: 1 },
-            user: { user_id: 10 },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await getTask(mockRequest, mockResponse)
+        const response = await request(app)
+            .get('/tasks/1')
+            .set('Authorization', 'Bearer mockValidToken')
 
         expect(db.task.findOne).toHaveBeenCalledWith({
             where: {
                 user_id: 10,
-                task_id: 1,
+                task_id: "1",
             },
 
         })
-        expect(mockResponse.statusCode).toBe(200)
-        // expect(mockResponse._getData()).toEqual(mockCreatedTask)
-        expect(mockResponse._getJSONData()).toEqual({ task: mockReturnedTask })
+        expect(response.statusCode).toBe(200)
+        expect(response.body).toEqual({ task: mockReturnedTask })
 
     })
 
@@ -207,36 +157,25 @@ describe('Task Controller - readTask', () => {
 
 
         db.task.findOne.mockResolvedValue(null)
-        const mockRequest = httpMocks.createRequest({
-            method: 'GET',
-            url: '/tasks/100',
-            params: { task_id: 100 },
-            user: { user_id: 10 },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await getTask(mockRequest, mockResponse)
 
+        const response = await request(app).get('/tasks/1000')
+            .set('Authorization', 'Bearer mockValidToken')
         expect(db.task.findOne).toHaveBeenCalledWith({
             where: {
                 user_id: 10,
-                task_id: 100,
+                task_id: "1000",
             },
 
         })
-        expect(mockResponse.statusCode).toBe(404)
-        // expect(mockResponse._getData()).toEqual(mockCreatedTask)
-        expect(mockResponse._getJSONData()).toEqual({ "message": "no task exists with this task id" })
+        expect(response.statusCode).toBe(404)
+        expect(response.body).toEqual({ "message": "no task exists with this task id" })
     })
 })
 
 describe('Task Controller - updateTask', () => {
     beforeEach(() => {
         db.task.findAll.mockClear()
-        validationResult.mockClear()
-        validationResult.mockImplementation(() => ({
-            isEmpty: jest.fn(() => true),
-            array: jest.fn(() => []),
-        }))
+
     })
     it('updates task by id with a status code 200', async () => {
         const mockReturnedTask = {
@@ -255,20 +194,16 @@ describe('Task Controller - updateTask', () => {
 
 
         db.task.update.mockResolvedValue([1, [mockReturnedTask]])
-        const mockRequest = httpMocks.createRequest({
-            method: 'PATCH',
-            url: '/tasks/1',
-            params: { task_id: 1 },
-            body: {
+
+        const response = await request(app)
+            .patch('/tasks/1')
+            .set('Authorization', 'Bearer mockValidToken')
+            .send({
                 "title": "edit updateed",
                 "description": "description",
                 "logged_time": 3.5,
                 "estimated_time": 9
-            },
-            user: { user_id: 10 },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await patchTask(mockRequest, mockResponse)
+            })
         expect(db.task.update).toHaveBeenCalledWith(
             {
                 "title": "edit updateed",
@@ -279,15 +214,14 @@ describe('Task Controller - updateTask', () => {
             {
                 where: {
                     user_id: 10,
-                    task_id: 1,
+                    task_id: "1",
                 },
                 returning: true
             }
 
         )
-        expect(mockResponse.statusCode).toBe(200)
-        // expect(mockResponse._getData()).toEqual(mockCreatedTask)
-        expect(mockResponse._getJSONData()).toEqual({ message: "Task updated successfully", task: mockReturnedTask })
+        expect(response.statusCode).toBe(200)
+        expect(response.body).toEqual({ message: "Task updated successfully", task: mockReturnedTask })
 
     })
 })
@@ -297,35 +231,27 @@ describe('Task Controller - updateTask', () => {
 describe('Task Controller - deleteTask', () => {
     beforeEach(() => {
         db.task.findAll.mockClear()
-        validationResult.mockClear()
-        validationResult.mockImplementation(() => ({
-            isEmpty: jest.fn(() => true),
-            array: jest.fn(() => []),
-        }))
+
     })
     it('deletes task by id with a status code 200', async () => {
 
         db.task.destroy.mockResolvedValue(null)
-        const mockRequest = httpMocks.createRequest({
-            method: 'DELETE',
-            url: '/tasks/1',
-            params: { task_id: 1 },
-            user: { user_id: 10 },
-        })
-        const mockResponse = httpMocks.createResponse()
-        await deleteTask(mockRequest, mockResponse)
+
+        const response = await request(app)
+            .delete('/tasks/1')
+            .set('Authorization', 'Bearer mockValidToken')
         expect(db.task.destroy).toHaveBeenCalledWith(
 
             {
                 where: {
                     user_id: 10,
-                    task_id: 1,
+                    task_id: "1",
                 },
 
             }
 
         )
-        expect(mockResponse.statusCode).toBe(204)
+        expect(response.statusCode).toBe(204)
 
     })
 })
