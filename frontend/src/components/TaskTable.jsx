@@ -1,12 +1,8 @@
 import React from 'react'
 import TaskElement from './TaskElement'
-import { useNavigate } from 'react-router-dom'
 import '../css/styles.css'
 function TaskTable({ tasks }) {
-    const navigate = useNavigate()
-    const handleRowClick = (task) => {
-        navigate(`/tasks/${task.task_id}`)
-    };
+
     return (
         <>
             <table className='table text-center table-hover table-fixed'>
@@ -20,7 +16,9 @@ function TaskTable({ tasks }) {
                 </thead>
                 <tbody className="table-group-divider">
                     {tasks.map((task) => (
-                        <TaskElement key={task.task_id} task={task} onClick={() => handleRowClick(task)} />
+                        // <TaskElement key={task.task_id} task={task} onClick={() => handleRowClick(task)} />
+                        <TaskElement task={task} />
+
                     ))}
                 </tbody>
             </table>

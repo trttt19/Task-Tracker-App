@@ -35,7 +35,7 @@ function TaskElement({ task }) {
 
     return (
 
-        <tr style={{ cursor: "pointer" }} onClick={handleRowClick} >
+        <tr data-testid="task_element" style={{ cursor: "pointer" }} onClick={handleRowClick} >
             <td>{task.title}</td>
             <td className={priorityClasses[task.priority]}>{priorities[task.priority]}</td>
             <td className={statusClasses[task.status]}>{statuses[task.status]}</td>

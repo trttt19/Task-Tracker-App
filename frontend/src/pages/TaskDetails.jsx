@@ -7,6 +7,7 @@ import { getTask, updateTask, deleteTask } from '../api/tasks';
 function TaskDetails() {
     const { task_id } = useParams();
     const [task, setTask] = useState(null);
+    const [originalTask, setOriginalTask] = useState(null)
     const [error, setError] = useState(null);
     const navigate = useNavigate()
     const deleteTaskFunction = async () => {
@@ -25,6 +26,7 @@ function TaskDetails() {
             try {
                 const data = await getTask(task_id);
                 setTask(data.task);
+                setOriginalTask(data.task)
             } catch (err) {
                 setError(err.message);
             }
@@ -36,19 +38,22 @@ function TaskDetails() {
         try {
 
             const payload = {};
-            if ((task.title != null)) payload.title = task.title;
-            if ((task.description != null) && (task.description !== '')) payload.description = task.description;
-            if ((task.status != null) && (task.status !== '')) payload.status = task.status;
-            if ((task.priority != null) && (task.priority !== '')) payload.priority = task.priority;
-            if ((task.due_date != null) && (task.due_date !== '')) {
+            if ((task.title != null) && (task.title != originalTask.title)) payload.title = task.title;
+            if ((task.description != null) && (task.description !== '') && (task.description != originalTask.description)) payload.description = task.description;
+            if ((task.status != null) && (task.status !== '') && (task.status != originalTask.status)) payload.status = task.status;
+            if ((task.priority != null) && (task.priority !== '') && (task.priority != originalTask.priority)) payload.priority = task.priority;
+            if ((task.due_date != null) && (task.due_date !== '') && (task.due_date != originalTask.due_date)) {
                 payload.due_date = new Date(task.due_date).toISOString();
             }
-            if ((task.logged_time != null) && (task.logged_time !== '')) payload.logged_time = task.logged_time;
-            if ((task.estimated_time != null) && (task.estimated_time !== '')) payload.estimated_time = task.estimated_time;
-
+            if ((task.logged_time != null) && (task.logged_time !== '') && (task.logged_time != originalTask.logged_time)) payload.logged_time = task.logged_time;
+            if ((task.estimated_time != null) && (task.estimated_time !== '') && (task.estimated_time != originalTask.estimated_time)) payload.estimated_time = task.estimated_time;
+            if (Object.keys(payload).length === 0) {
+                alert('No changes detected to update.');
+                return;
+            }
             console.log(`Sending update payload:`, payload);
             const updatedTaskResponse = await updateTask(task.task_id, payload);
-
+            setOriginalTask(updatedTaskResponse.task)
             setTask(updatedTaskResponse.task);
             alert('Task Updated Successfully!');
         } catch (error) {
@@ -95,8 +100,9 @@ function TaskDetails() {
                                     <input type='text' id='title' className='form-control' value={task.title || ''} onChange={(e) => handleInputChange("title", e.target.value)} />
                                 </div>
                                 <div className="col-12">
-                                    <label className="form-label">Description</label>
+                                    <label htmlFor='description' className="form-label">Description</label>
                                     <textarea
+                                        id='description'
                                         type="text"
                                         className="form-control"
                                         value={task.description || ''}
@@ -104,28 +110,28 @@ function TaskDetails() {
                                     />
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label">Status</label>
-                                    <StatusDropDown value={task.status || ''} onChange={(e) => handleInputChange("status", e.target.value)} />
+                                    <label htmlFor='status' className="form-label">Status</label>
+                                    <StatusDropDown id='status' value={task.status || ''} onChange={(e) => handleInputChange("status", e.target.value)} />
 
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label">Priority</label>
-                                    <PriorityDropdown value={task.priority || ''} onChange={(e) => handleInputChange("priority", e.target.value)} />
+                                    <label htmlFor='priority' className="form-label">Priority</label>
+                                    <PriorityDropdown id='priority' value={task.priority || ''} onChange={(e) => handleInputChange("priority", e.target.value)} />
 
                                 </div>
                                 <div className="col-12">
-                                    <label className="form-label">Due Date</label>
-                                    <input type="datetime-local" className="form-control" value={task.due_date || ''} onChange={(e) => handleInputChange("due_date", e.target.value)} />
+                                    <label htmlFor='due_date' className="form-label">Due Date</label>
+                                    <input id='due_date' type="datetime-local" className="form-control" value={task.due_date ? new Date(task.due_date).toISOString().substring(0, 16) : ''} onChange={(e) => handleInputChange("due_date", e.target.value)} />
 
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label">Estimated Time</label>
+                                    <label htmlFor='estimated_time' className="form-label">Estimated Time</label>
 
                                     <input type="number" className="form-control" id="estimated_time" value={task.estimated_time || ''} onChange={(e) => handleInputChange("estimated_time", e.target.value)} />
                                 </div>
                                 <div className="col-md-6">
-                                    <label className="form-label">Logged Time</label>
-                                    <input type="text" className="form-control" id="logged_time" value={task.logged_time || ''} onChange={(e) => handleInputChange("logged_time", e.target.value)} />
+                                    <label htmlFor='logged_time' className="form-label">Logged Time</label>
+                                    <input type="number" className="form-control" id="logged_time" value={task.logged_time || ''} onChange={(e) => handleInputChange("logged_time", e.target.value)} />
                                 </div>
                                 <div>
                                     <p>Spent {task.logged_time} hours on task {task.title}</p>

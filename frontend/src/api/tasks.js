@@ -2,7 +2,9 @@ import api from './axios'
 
 const getAllTasks = async (params = {}) => {
     try {
-        const response = await api.get('/api/tasks', { params });
+        // const response = await api.get('/api/tasks', { params });
+        const response = await api.get('tasks', { params });
+
         return response.data;
     } catch (error) {
         throw new Error(
@@ -16,7 +18,9 @@ const getAllTasks = async (params = {}) => {
 
 const getTask = async (task_id) => {
     try {
-        const response = await api.get(`/api/tasks/${task_id}`)
+        // const response = await api.get(`/api/tasks/${task_id}`)
+        const response = await api.get(`tasks/${task_id}`)
+
         return response.data
     } catch (error) {
         throw new Error(
@@ -30,7 +34,9 @@ const getTask = async (task_id) => {
 
 const updateTask = async (task_id, data) => {
     try {
-        const response = await api.patch(`/api/tasks/${task_id}`, data);
+        // const response = await api.patch(`/api/tasks/${task_id}`, data);
+        const response = await api.patch(`tasks/${task_id}`, data);
+
         return response.data;
     } catch (error) {
         throw new Error(
@@ -43,7 +49,9 @@ const updateTask = async (task_id, data) => {
 };
 const createTask = async (data) => {
     try {
-        const response = await api.post(`/api/tasks`, data);
+        // const response = await api.post(`/api/tasks`, data);
+        const response = await api.post(`tasks`, data);
+
         return response.data;
     } catch (error) {
         throw new Error(
@@ -56,7 +64,9 @@ const createTask = async (data) => {
 };
 const deleteTask = async (task_id) => {
     try {
-        const response = await api.delete(`/api/tasks/${task_id}`)
+        // const response = await api.delete(`/api/tasks/${task_id}`)
+        const response = await api.delete(`tasks/${task_id}`)
+
         return response.data
     } catch (error) {
         throw new Error(
